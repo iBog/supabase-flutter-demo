@@ -21,6 +21,8 @@ class _SignInState extends AuthState<SignInScreen> {
       RoundedLoadingButtonController();
   final RoundedLoadingButtonController _githubSignInController =
       RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _googleSignInController =
+      RoundedLoadingButtonController();
 
   String _email = '';
   String _password = '';
@@ -84,6 +86,15 @@ class _SignInState extends AuthState<SignInScreen> {
 
     Supabase.instance.client.auth.signInWithProvider(
       supabase.Provider.github,
+      options: supabase.AuthOptions(redirectTo: authRedirectUri),
+    );
+  }
+
+  Future _googleSigninPressed(BuildContext context) async {
+    FocusScope.of(context).unfocus();
+
+    Supabase.instance.client.auth.signInWithProvider(
+      supabase.Provider.google,
       options: supabase.AuthOptions(redirectTo: authRedirectUri),
     );
   }
@@ -157,6 +168,18 @@ class _SignInState extends AuthState<SignInScreen> {
                 },
                 child: const Text(
                   'Github Login',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 15.0),
+              RoundedLoadingButton(
+                color: Colors.black,
+                controller: _googleSignInController,
+                onPressed: () {
+                  _googleSigninPressed(context);
+                },
+                child: const Text(
+                  'Google Login',
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
